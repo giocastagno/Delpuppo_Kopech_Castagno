@@ -1,0 +1,2 @@
+1:{'a': 'laser', 'c': 'cabina', 'b': 'cabina', 'e': 'laser', 'd': 'laser', 'g': 'cabina', 'f': 'cabina', 'i': 'bahia', 'h': 'laser', 'k': 'cabina', 'j': 'laser', 'm': 'cabina', 'l': 'laser', 'o': 'laser', 'n': 'cabina', 'q': 'laser', 'p': 'cabina'}
+2:{'a': 'laser', 'c': 'bahia', 'b': 'cabina', 'e': 'cabina', 'd': 'sistema', 'g': 'sistema', 'f': 'laser', 'i': 'cabina', 'h': 'bahia', 'k': 'escudo', 'j': 'bahia', 'm': 'escudo', 'l': 'laser', 'o': 'cabina', 'n': 'escudo', 'q': 'laser', 'p': 'sistema'}

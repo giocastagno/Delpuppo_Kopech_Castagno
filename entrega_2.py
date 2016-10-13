@@ -7,15 +7,9 @@ from simpleai.search import (CspProblem, backtrack, min_conflicts,
 casillas = list('abcdefghijklmnopq')
 
 dominios = {casilla: ['laser','motor','cabina','bahia','sistema','escudo','bateria']
-            for casilla in casillas}
+            for casilla in casillas}    
 
-
-#Motores ubicarse en slots traseros o en los 4 slots laterales 
-for casilla in casillas:
-    if casilla not in list('efmnopq'):
-        dominios[casilla].remove('motor')
-
-#combinaciones de a pares SE FUE =P
+#combinaciones de a pares
 combinaciones = (('a', 'b'),('a', 'c'),('b', 'd'),('c', 'd'),('d', 'f'),('e', 'c'),('e', 'g'),
     ('f', 'h'),('g', 'h'),('g', 'i'),('h', 'i'),('i', 'j'),('j', 'k'),('k', 'l'),
     ('l', 'm'),('l', 'n'),('l', 'p'),('o', 'p'),('p', 'q'),
@@ -37,14 +31,9 @@ combinaciones2 = (('a', 'b', 'c'),
     ('m', 'l'),
     ('n', 'l'),
     ('o', 'p'),
+    ('p', 'l', 'o', 'q'),              
     ('q', 'p'),
-    ('p', 'l', 'o', 'q'),
     )
-
-
-#No es posible instalar dos modulos iguales conectados entre si
-def diferentes (variables, valores):
-    return valores[0] != valores[1]
 
 #No puede haber baterias conectadas a lasers
 def bateria_laser (variables, valores):
@@ -54,12 +43,17 @@ def bateria_laser (variables, valores):
         return ('laser' not in valores)
     return True
 
+#Motores ubicarse en slots traseros o en los 4 slots laterales 
+def motor_bordes (variables, valores):
+    if variables not in list('efmnopq'):
+        return ('motor' not in valores)
+    return True
+
 #Sistemas de vida extraterrestre tienen que ubicarse conectados a cabinas.
 def sistema_cabina(variables, valores):
     if valores[0] == 'sistema': 
-        return 'cabina' in valores
+        return ('cabina' in valores)
     return True
-    
 
 #Las cabinas no pueden estar conectadas a los motores
 def cabina_motor (variables, valores):
@@ -80,7 +74,7 @@ def sistema_escudo (variables, valores):
 #Bahias de carga al menos una cabina conectada
 def bahia_cabina (variables, valores):
     if valores[0] == 'bahia': 
-        return 'cabina' in valores
+        return ('cabina' in valores)
     return True    
 
 #Baterias tienen 2 de: Lasers, Cabinas, Escudos y Sistemas de vida E
@@ -92,13 +86,14 @@ def bateria_2 (variables, valores):
         return c > 1
     return True
 
-#Que no queden casillas vacias
-def casillas_llenas(variables, valores):
-    for casilla in casillas:
-        if  len(dominios[casilla]) > 0:
-            return True
+#No es posible instalar dos modulos iguales conectados entre si
+def diferentes (variables, valores):
+    return valores[0] != valores[1]
     
 restricciones = []
+
+for variable in casillas:
+    restricciones.append((variable, motor_bordes))
     
 for variable in combinaciones:
     restricciones.append((variable, diferentes))
@@ -111,7 +106,6 @@ for variable in combinaciones2:
     restricciones.append((variable, cabina_motor)) 
     restricciones.append((variable, sistema_escudo))
     
-restricciones.append((casillas, casillas_llenas))
 
 def resolver(metodo_busqueda, iteraciones):
     problema = CspProblem(casillas, dominios, restricciones)
