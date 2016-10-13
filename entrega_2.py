@@ -95,9 +95,8 @@ def bateria_2 (variables, valores):
 #Que no queden casillas vacias
 def casillas_llenas(variables, valores):
     for casilla in casillas:
-        if casilla not in valores:
-            return False
-    return True
+        if  len(dominios[casilla]) > 0:
+            return True
     
 restricciones = []
     
